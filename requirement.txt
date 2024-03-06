@@ -1,2 +1,4 @@
 openai-whisper
 moviepy
+langchain_openai
+python-dotenv
