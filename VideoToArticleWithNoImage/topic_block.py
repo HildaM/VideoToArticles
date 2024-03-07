@@ -2,45 +2,42 @@ from openai import OpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from constant import TOPIC_BLOCK_TIMELINE
 from config import Config
-import os
 
 def read_file(file_path):
-    """从给定的文件路径读取内容"""
     with open(file_path, 'r', encoding='utf-8') as file:
         return file.read()
 
 def write_file(file_path, content):
-    """将内容写入到给定的文件路径"""
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(content)
 
 def preprocess_textB(textB):
-    """预处理文本B，确保每个主题标题后跟时间范围"""
-    # 将文本按行分割，并移除空行
+    """Preprocess text B to ensure each topic title is followed by a time range"""
+    # Split the text into lines and remove empty lines
     lines = [line for line in textB.split('\n') if line.strip() != '']
     processed_lines = []
     for line in lines:
         if line.startswith('```'):
             continue
-        # 直接添加处理过的行到结果中
+        # Directly add the processed lines to the result
         processed_lines.append(line)
     return '\n'.join(processed_lines)
 
 def process_text(textA, textB):
-    """处理文本A和文本B，返回格式化的输出"""
-    # 解析文本A
+    """Process textA(timeframe_text) and textB(topic_timeline), returning a formatted output"""
+    # Parse textA
     segments_a = {}
     for line in textA.strip().split('\n'):
         time_range, text = line.split(': ', 1)
         start, end = time_range.split('-')
         segments_a[(float(start), float(end))] = text  # 使用元组作为键，存储开始和结束时间
 
-    # 解析文本B并提取相应文本
+    # Parse text B and extract the relevant text
     output = []
-    # 确保文本B按正确的格式被分割
+    # Ensure text B is split in the correct format
     topics = preprocess_textB(textB).split('\n')
-    for i in range(0, len(topics), 2):  # 每两行一组，第一行是标题，第二行是时间范围
-        if i+1 < len(topics):  # 确保有时间范围行存在
+    for i in range(0, len(topics), 2):  # In groups of two lines each, the first line is the title, the second line is the time range
+        if i+1 < len(topics):  # Ensure that a time range line exists.
             title = topics[i]
             time_range = topics[i+1]
             start, end = map(float, time_range.split('-'))
@@ -48,7 +45,7 @@ def process_text(textA, textB):
             output.append("SEPARATE")
             output.append(title)
             for (segment_start, segment_end), segment_text in segments_a.items():
-                # 检查段落是否至少部分位于指定范围内
+                # Check if the paragraph is at least partially within the specified range
                 if not (end < segment_start or start > segment_end):
                     output.append(f"{segment_start}-{segment_end}: {segment_text}")
 
@@ -76,8 +73,8 @@ start和end，以及主题，都需要你通读下面的全文才能得出。
 
 
 class TopicBlock:
-    def __init__(self, timeframe_path: str):
-        self.config = Config()
+    def __init__(self, timeframe_path: str, config: Config):
+        self.config = config
         self._client = OpenAI(base_url=self.config.openai_api_base, api_key=self.config.openai_api_key)
         self.timeframe_text = read_file(timeframe_path)
 
@@ -100,6 +97,20 @@ class TopicBlock:
         raw_topic_timeline = completion.choices[0].message.content
         return preprocess_textB(raw_topic_timeline)
     
+    def get_topic_blocks(self):
+        with open(TOPIC_BLOCK_TIMELINE, 'r', encoding='utf-8') as file:
+            content = file.read()
+        
+        # Split the text using "SEPARATE" as the delimiter.
+        text_blocks = content.split("SEPARATE\n")
+        
+        # Remove empty string elements from the list.
+        text_blocks = [block for block in text_blocks if block.strip()]
+        
+        return text_blocks
+    
+
+
 
 if __name__=='__main__':
     from langchain.globals import set_debug
