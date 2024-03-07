@@ -4,22 +4,44 @@ from config import Config
 from constant import MARKDOWN_FILE
 
 
+# NO_CONTEXT_PROMPT = ChatPromptTemplate.from_template(
+# """给出一个带有”标题+时间戳文本“的文段，你需要通读整个文段，并根据标题的内容输出一篇文章。你需要以第三人称进行阐述，输出的文章要附带有原有的标题。以txt格式进行输出。
+# 以下是所给文本:
+# ‍```
+# {context}
+# ‍```
+# """
+# )
+
 NO_CONTEXT_PROMPT = ChatPromptTemplate.from_template(
-"""给出一个带有”标题+时间戳文本“的文段，你需要通读整个文段，并根据标题的内容输出一篇文章。你需要以第三人称进行阐述，输出的文章要附带有原有的标题。以txt格式进行输出。
-以下是所给文本:
+"""Given a text segment with "title + timestamped text," you are required to read through the entire segment and produce an article based on the content of the titles. You must narrate in the third person, and the output article should include the original titles. Output should be in txt format.
+Below is the provided text:
 ‍```
 {context}
 ‍```
 """
 )
 
+# CONTEXT_PROMPT = ChatPromptTemplate.from_template(
+# """以下有2个文本A和B，A的时间在B之前，B的内容收到A影响。B文本是一个带有”标题+时间戳文本“的文段，你需要通读整个B文段，并根据标题的内容输出一篇文段，同时要参考B时间戳原文的叙事角度。输出的文章要附带有原有的标题。以txt格式进行输出。
+# 以下是所给A文本:
+# ‍```
+# {previous}
+# ‍```
+# B文本:
+# ‍```
+# {current}
+# ‍```
+# """
+# )
+
 CONTEXT_PROMPT = ChatPromptTemplate.from_template(
-"""以下有2个文本A和B，A的时间在B之前，B的内容收到A影响。B文本是一个带有”标题+时间戳文本“的文段，你需要通读整个B文段，并根据标题的内容输出一篇文段，同时要参考B时间戳原文的叙事角度。输出的文章要附带有原有的标题。以txt格式进行输出。
-以下是所给A文本:
+"""Below are two texts, A and B, with A's events occurring before those of B. The content of B is influenced by A. Text B is a segment with "title + timestamped text," and you are required to read through the entire segment of B, producing a text based on the content of the titles while also considering the narrative perspective of the original timestamps in B. The output article should include the original titles and be formatted as a txt file.
+Below is the given text for A:
 ‍```
 {previous}
 ‍```
-B文本:
+Text for B:
 ‍```
 {current}
 ‍```
