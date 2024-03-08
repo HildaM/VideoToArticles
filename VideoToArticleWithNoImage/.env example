@@ -1,0 +1,14 @@
+DEVICE = 'cuda'
+
+OPENAI_API_BASE = "api-url"
+OPENAI_API_KEY = "openai-key"
+OPENAI_MODEL_NAME = "model-name"
+
+WHISPER_MODEL = "large"
+
+ARTICLE_LANGUAGE = "en"
+
+# Local LM Studio Settings
+# OPENAI_API_BASE = "http://localhost:1234/v1"
+# OPENAI_API_KEY = "not-needed"
+# OPENAI_MODEL_NAME = "not-needed"

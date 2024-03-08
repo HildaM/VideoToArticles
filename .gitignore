@@ -2,5 +2,6 @@
 **/*.wav
 **/*.env
 **/*.txt
+**/*.md
 .VSCodeCounter
 __pycache__/

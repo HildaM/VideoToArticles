@@ -3,7 +3,6 @@ from topic_block import TopicBlock
 from article import Article
 from constant import TIMEFRAME_FILE
 from config import Config
-import time
 
 
 if __name__ == '__main__':
