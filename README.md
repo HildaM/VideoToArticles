@@ -27,6 +27,9 @@ After you set your config, run the following command:
 2. cd VideoToArticleWithNoImage
 3. `python main.py`
 
+If the program runs smoothly, the final generated articles will be stored in the `result` folder.
+The `temp` folder is used to store intermediate files during the program's execution, which can be deleted upon successful completion.
+
 ## TODO
 
 - [ ] Intergrate image in articles
