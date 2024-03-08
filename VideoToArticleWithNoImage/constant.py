@@ -1,8 +1,12 @@
+import os
+
 # 全局变量
-AUDIO_PATH = "extracted_audio.wav"
-TIMEFRAME_FILE = "timeframe.txt"
-TOPIC_BLOCK_TIMELINE = "topic_timeline.txt"
-MARKDOWN_FILE = "generated_article.md"
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+TEMP_FOLDER = os.path.join(PROJECT_ROOT, "temp")
+AUDIO_PATH = os.path.join(TEMP_FOLDER, "extracted_audio.wav")
+TIMEFRAME_FILE = os.path.join(TEMP_FOLDER, "timeframe.txt")
+TOPIC_BLOCK_TIMELINE = os.path.join(TEMP_FOLDER, "topic_timeline.txt")
+RESULT_FOLDER = os.path.join(PROJECT_ROOT, "result")
 
 # Config Key
 DEVICE = "DEVICE"

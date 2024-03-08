@@ -1,7 +1,9 @@
 from openai import OpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from config import Config
-from constant import MARKDOWN_FILE
+from constant import RESULT_FOLDER
+import time
+import os
 
 
 # NO_CONTEXT_PROMPT = ChatPromptTemplate.from_template(
@@ -125,7 +127,8 @@ class Article:
         self._generate_without_context()
         self._generate_with_context()
 
-        with open(MARKDOWN_FILE, 'w', encoding='utf-8') as file:
+        file_path = os.path.join(RESULT_FOLDER, "articles_" + str(time.time()) + ".md")
+        with open(file_path, 'w', encoding='utf-8') as file:
             for item in self._paragraphs:
                 file.write(f"{item}\n\n")
 

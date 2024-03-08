@@ -5,7 +5,8 @@ import constant
 from config import Config
 
 # Step 1: Extract audio from the video file
-def extract_audio(video_path, audio_path):
+def extract_audio(video_path):
+    audio_path = constant.AUDIO_PATH
     if not os.path.exists(audio_path):
         video = mp.VideoFileClip(video_path)
         video.audio.write_audiofile(audio_path)
@@ -13,13 +14,13 @@ def extract_audio(video_path, audio_path):
         print(f"Audio file {audio_path} already exists. Skipping extraction.")
 
 # Step 2: Convert audio to timestamped text using the Whisper model
-def transcribe_audio(audio_path, model, device):
+def transcribe_audio(model, device):
     if os.path.exists(constant.TIMEFRAME_FILE):
         print(f"TimeFrame file {constant.TIMEFRAME_FILE} already exists. Skipping extraction.")
         return constant.TIMEFRAME_FILE, True
 
     model = whisper.load_model(model, device=device)
-    result = model.transcribe(audio_path)
+    result = model.transcribe(constant.AUDIO_PATH)
     return result, False
 
 # Step 3: Save the transcribed text to a TXT file, with timestamps rounded to two decimal places
@@ -38,12 +39,9 @@ class TimeFrame:
         self._config = config
 
     def process(self):
-        audio_path = constant.AUDIO_PATH
-        timeframe_path = constant.TIMEFRAME_FILE
-
-        extract_audio(self.video_path, audio_path)
-        transcription_result, exist = transcribe_audio(audio_path, self._config.whisper_model, self._config.device)
+        extract_audio(self.video_path)
+        transcription_result, exist = transcribe_audio(self._config.whisper_model, self._config.device)
 
         if not exist:
-            save_transcription_to_txt(transcription_result, timeframe_path)
+            save_transcription_to_txt(transcription_result, constant.TIMEFRAME_FILE)
         return transcription_result
