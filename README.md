@@ -26,6 +26,7 @@ After you set your config, run the following command:
 1. `pip install -r requirement.txt`
 2. cd VideoToArticleWithNoImage
 3. `python main.py`
+4. Enter your local video file path
 
 If the program runs smoothly, the final generated articles will be stored in the `result` folder.
 The `temp` folder is used to store intermediate files during the program's execution, which can be deleted upon successful completion.
